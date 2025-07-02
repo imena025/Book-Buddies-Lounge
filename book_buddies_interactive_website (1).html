@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Buddies Lounge - Allan's ENT 110 Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: linear-gradient(135deg, #2c5aa0 0%, #1e3c72 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: rgba(255,255,255,0.2);
+            border-color: #ffd700;
+            color: #ffd700;
+            transform: translateY(-2px);
+        }
+
+        /* Content Groups */
+        .content-group {
+            display: none;
+            padding: 2rem;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-group.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            margin: -2rem -2rem 2rem -2rem;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .section-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-left: 5px solid #e17055;
+        }
+
+        .resource-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .resource-btn {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .resource-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,184,148,0.4);
+        }
+
+        .visual-placeholder {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            margin: 1.5rem 0;
+            border: 3px dashed rgba(255,255,255,0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 4px solid #667eea;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .quote-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            margin: 1.5rem 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            font-style: italic;
+        }
+
+        .quote-author {
+            text-align: right;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                justify-content: center;
+            }
+            
+            .nav-btn {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+            
+            .content-group {
+                padding: 1rem;
+            }
+            
+            .section-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">📚 Book Buddies Lounge</div>
+                <div class="nav-links">
+                    <button class="nav-btn active" onclick="showSection('home')">Home</button>
+                    <button class="nav-btn" onclick="showSection('journey')">My Journey</button>
+                    <button class="nav-btn" onclick="showSection('solution')">Our Solution</button>
+                    <button class="nav-btn" onclick="showSection('prototype')">Prototype</button>
+                    <button class="nav-btn" onclick="showSection('reflection')">Reflection</button>
+                    <button class="nav-btn" onclick="showSection('future')">What's Next?</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- HOME GROUP -->
+        <div id="home" class="content-group active">
+            <div class="section-header">
+                <h1>Welcome to My Entrepreneurial Journey</h1>
+                <p>Transforming Reading Culture in Rural Rwanda</p>
+            </div>
+            
+            <div class="content-text">
+                Hello! I'm Allan Philip, and I'm passionate about transforming how children in rural Rwanda experience reading. Through my ENT 110 project, I've embarked on an incredible journey to address a critical challenge that I believe holds the key to unlocking Rwanda's future potential.
+            </div>
+            
+            <div class="content-text">
+                I discovered that children in rural Rwanda have limited access to engaging books outside their formal education, and reading for personal development is often viewed as non-essential. This realization sparked my mission to create something extraordinary: <strong>Book Buddies Lounge</strong> - community reading spaces that transform reading from a neglected activity into an exciting, culturally-valued experience.
+            </div>
+            
+            <div class="highlight-box">
+                <strong>My Mission:</strong> Give every child aged 6-14 the opportunity to explore storybooks and non-fiction through fun, social activities that build the critical thinking and creativity skills essential for Rwanda's future.
+            </div>
+            
+            <div class="content-text">
+                My vision is simple yet powerful: This isn't just about books - it's about nurturing the next generation of innovators and leaders. Join me as I share how I identified this problem, developed my solution, and learned invaluable lessons about entrepreneurship, community engagement, and the power of reading to change lives.
+            </div>
+            
+            <div class="visual-placeholder">
+                <h3>🎨 Visual Elements for This Section:</h3>
+                <p>• Hero image of Rwandan children reading together outdoors<br>
+                • Your portrait with books or in a rural Rwandan setting<br>
+                • Rwanda flag colors incorporated into design elements<br>
+                • Icons representing reading, community, and growth</p>
+            </div>
+        </div>
+
+        <!-- ENTREPRENEURIAL JOURNEY GROUP -->
+        <div id="journey" class="content-group">
+            <div class="section-header">
+                <h1>How I Discovered a Hidden Crisis</h1>
+                <p>My path from observation to action</p>
+            </div>
+            
+            <div class="content-text">
+                My entrepreneurial journey began during a community visit to a rural village in Rwanda. I was volunteering at a local school when I noticed something that would change my perspective forever. During break time, while children in urban areas might be reading picture books or discussing stories, these brilliant young minds were playing with sticks and stones - not because they preferred it, but because it was their only option.
+            </div>
+            
+            <div class="quote-box">
+                "Books are good, but will they help my granddaughter feed her family?"
+                <div class="quote-author">- Community Grandmother</div>
+            </div>
+            
+            <div class="content-text">
+                I started asking questions. I spoke with teachers, parents, and community leaders. What I discovered broke my heart but also ignited my entrepreneurial spirit. Parents genuinely wanted their children to succeed, but many viewed reading storybooks as "luxury" or "foreign influence." Teachers were overwhelmed, focusing solely on curriculum requirements.
+            </div>
+            
+            <div class="content-text">
+                The turning point came when I met 8-year-old Grace, who told me she loved the one fairy tale book at her school but had read it seventeen times because it was the only story available. Her eyes lit up when she talked about imagining new adventures, but then dimmed when she realized she had no new stories to discover.
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">45</div>
+                    <p>Community Members Interviewed</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">30</div>
+                    <p>Families Surveyed</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <p>Educators Consulted</p>
+                </div>
+            </div>
+            
+            <div class="resource-buttons">
+                <a href="#" class="resource-btn">📊 View My Empathy Map</a>
+                <a href="#" class="resource-btn">📋 Download Research Report</a>
+            </div>
+            
+            <div class="visual-placeholder">
+                <h3>🎨 Visual Elements for This Section:</h3>
+                <p>• Timeline infographic of your discovery process<br>
+                • Photos from your community visits (with permission)<br>
+                • Map of Rwanda highlighting rural areas you researched<br>
+                • Before/after comparison images showing current vs. envisioned reading environments</p>
+            </div>
+        </div>
+
+        <!-- SOLUTION GROUP -->
+        <div id="solution" class="content-group">
+            <div class="section-header">
+                <h1>Introducing Book Buddies Lounge</h1>
+                <p>Community reading spaces that transform culture</p>
+            </div>
+            
+            <div class="content-text">
+                My solution is <strong>Book Buddies Lounge</strong> - welcoming community reading spaces specifically designed for rural Rwanda, where children aged 6-14 can access diverse storybooks and non-fiction through engaging, social reading activities.
+            </div>
+            
+            <div class="highlight-box">
+                <strong>Key Features:</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Social Reading Activities:</strong> Peer reading challenges and storytelling sessions</li>
+                    <li><strong>Cultural Integration:</strong> Local languages and Rwandan values</li>
+                    <li><strong>Skills Development:</strong> Critical thinking and creativity focus</li>
+                    <li><strong>Community Ownership:</strong> Local volunteers and parent involvement</li>
+                </ul>
+            </div>
+            
+            <div class="content-text">
+                <strong>The Physical Space:</strong> I envision cozy, colorful reading corners with comfortable seating, good lighting, and displays that celebrate both local and international stories. These aren't traditional libraries - they're vibrant community hubs that feel like a friend's living room where amazing stories come alive.
+            </div>
+            
+            <div class="content-text">
+                What makes Book Buddies Lounge unique is that it treats reading as a social, celebratory activity rather than solitary homework. We're not just providing books - we're transforming the entire culture around reading in rural communities.
+            </div>
+            
+            <div class="resource-buttons">
+                <a href="#" class="resource-btn">📈 View Lean Canvas</a>
+                <a href="#" class="resource-btn">💰 See Budget Sheet</a>
+            </div>
+            
+            <div class="visual-placeholder">
+                <h3>🎨 Visual Elements for This Section:</h3>
+                <p>• Floor plan mockup of an ideal Book Buddies Lounge space<br>
+                • Infographic showing the activity flow<br>
+                • Icons representing key features<br>
+                • Comparison chart: traditional library vs. Book Buddies Lounge</p>
+            </div>
+        </div>
+
+        <!-- PROTOTYPE GROUP -->
+        <div id="prototype" class="content-group">
+            <div class="section-header">
+                <h1>Building and Testing My Vision</h1>
+                <p>From concept to tangible experience</p>
+            </div>
+            
+            <div class="content-text">
+                Creating my low-fidelity prototype was both exciting and humbling. I wanted to test whether my concept could actually work before investing time and resources in a full implementation.
+            </div>
+            
+            <div class="content-text">
+                <strong>My Prototype Approach:</strong> I created a physical mockup using cardboard, colored paper, and borrowed furniture to simulate a Book Buddies Lounge corner. I designed activity cards for reading challenges, created sample storytelling prompts, and developed a simple point system for peer engagement.
+            </div>
+            
+            <div class="content-text">
+                <strong>Testing Process:</strong> I set up my prototype at a local community center and invited 12 children aged 6-14 to participate in a 2-hour trial session. I observed how they interacted with the space, which activities engaged them most, and what challenges emerged.
+            </div>
+            
+            <div class="quote-box">
+                "Can I bring my little sister next time?"
+                <div class="quote-author">- Samuel, age 9 (during prototype testing)</div>
+            </div>
+            
+            <div class="content-text">
+                <strong>Key Learning:</strong> This simple question made me realize I had been thinking too narrowly about age groups. The most engaged participants were mixed-age groups where older children naturally mentored younger ones.
+            </div>
+            
+            <div class="highlight-box">
+                <strong>Iterations I Made:</strong>
+                <ul style="margin-top: 1rem;">
+                    <li>Simplified the badge system based on user feedback</li>
+                    <li>Added mobile seating options for flexible group sizes</li>
+                    <li>Created spaces for children to display their own artwork and stories</li>
+                    <li>Strengthened connections to home for family engagement</li>
+                </ul>
+            </div>
+            
+            <div class="resource-buttons">
+                <a href="#" class="resource-btn">🎥 Watch Prototype Demo</a>
+                <a href="#" class="resource-btn">📝 View User Feedback</a>
+            </div>
+            
+            <div class="visual-placeholder">
+                <h3>🎨 Visual Elements for This Section:</h3>
+                <p>• Time-lapse video of prototype setup process<br>
+                • Before/after photos showing iterations based on feedback<br>
+                • Children interacting with prototype elements<br>
+                • Hand-drawn sketches of original vs. revised layouts</p>
+            </div>
+        </div>
+
+        <!-- REFLECTION GROUP -->
+        <div id="reflection" class="content-group">
+            <div class="section-header">
+                <h1>What Entrepreneurship Taught Me</h1>
+                <p>Lessons learned and insights gained</p>
+            </div>
+            
+            <div class="content-text">
+                This project transformed my understanding of entrepreneurship, problem-solving, and community engagement in ways I never expected.
+            </div>
+            
+            <div class="content-text">
+                <strong>My Biggest Surprise:</strong> I initially thought the main barrier was lack of books. Through my research and interviews, I discovered the real challenge was cultural perception and community systems. Parents weren't against reading - they were protecting their children from what they perceived as irrelevant or potentially harmful influences.
+            </div>
+            
+            <div class="highlight-box">
+                <strong>What I'd Do Differently:</strong> I would start with community conversations before developing any solution. I spent weeks perfecting my prototype before really understanding what the community wanted. Next time, I'd involve community members as co-designers from day one, not just feedback providers at the end.
+            </div>
+            
+            <div class="content-text">
+                <strong>Skills I Developed:</strong> This project pushed me far outside my comfort zone. I learned to conduct respectful interviews across language and cultural barriers, to iterate based on user feedback rather than my assumptions, and to present ideas in ways that connect with different audiences.
+            </div>
+            
+            <div class="content-text">
+                <strong>The Validation That Mattered Most:</strong> When parents started asking when Book Buddies Lounge would open permanently, I knew we had created something valuable. But the real validation came when children began creating their own stories inspired by what they read - exactly the creativity and critical thinking outcomes I hoped to achieve.
+            </div>
+            
+            <div class="visual-placeholder">
+                <h3>🎨 Visual Elements for This Section:</h3>
+                <p>• Infographic summarizing key insights from interviews<br>
+                • Photo collage of community feedback sessions<br>
+                • Pull quotes from parents, children, and educators<br>
+                • Personal reflection video or mind map</p>
+            </div>
+        </div>
+
+        <!-- FUTURE PLANS GROUP -->
+        <div id="future" class="content-group">
+            <div class="section-header">
+                <h1>What's Next for Book Buddies Lounge</h1>
+                <p>Building sustainable impact for Rwanda's future</p>
+            </div>
+            
+            <div class="content-text">
+                I'm energized by what we've accomplished so far, but this is just the beginning. My next steps focus on sustainable growth, community ownership, and measurable impact.
+            </div>
+            
+            <div class="content-text">
+                <strong>Immediate Next Steps (Next 3 Months):</strong> I'm planning to establish our first permanent Book Buddies Lounge location in partnership with a rural community center that has already expressed interest. This will serve as our proof-of-concept location where we can refine operations and document impact.
+            </div>
+            
+            <div class="highlight-box">
+                <strong>Long-term Vision (3-5 Years):</strong> I envision a network of community-owned Book Buddies Lounges across rural Rwanda, each adapted to local culture but sharing resources, training, and success stories. More importantly, I want to see measurable improvements in children's creativity, critical thinking, and communication skills.
+            </div>
+            
+            <div class="content-text">
+                <strong>How You Can Help:</strong> If you're inspired by this mission, here's how you can get involved:
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">📚</div>
+                    <strong>Donate Books</strong>
+                    <p>Culturally appropriate storybooks and non-fiction</p>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🤝</div>
+                    <strong>Share Expertise</strong>
+                    <p>Education, community development, nonprofit management</p>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">📢</div>
+                    <strong>Spread the Word</strong>
+                    <p>Connect us with partners, funders, communities</p>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">👥</div>
+                    <strong>Visit Us</strong>
+                    <p>See our work and share improvement ideas</p>
+                </div>
+            </div>
+            
+            <div class="content-text">
+                This project taught me that meaningful change happens one community, one child, one story at a time. Book Buddies Lounge isn't just about reading - it's about believing in Rwanda's children and giving them tools to shape their own futures.
+            </div>
+            
+            <div class="highlight-box" style="text-align: center;">
+                <h3>Join us in transforming how children experience reading, learning, and creativity.</h3>
+                <p><strong>Contact me at: allanphilip85@gmail.com to learn more or get involved!</strong></p>
+            </div>
+            
+            <div class="visual-placeholder">
+                <h3>🎨 Visual Elements for This Section:</h3>
+                <p>• Timeline roadmap showing next steps over 6-12 months<br>
+                • Vision board with images representing long-term goals<br>
+                • Map of potential expansion locations<br>
+                • Call-to-action buttons and contact forms</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all content groups
+            const allGroups = document.querySelectorAll('.content-group');
+            allGroups.forEach(group => {
+                group.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            const allButtons = document.querySelectorAll('.nav-btn');
+            allButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Add click handlers to resource buttons to show they're interactive
+        document.addEventListener('DOMContentLoaded', function() {
+            const resourceButtons = document.querySelectorAll('.resource-btn');
+            resourceButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('This button would link to your ' + this.textContent.trim() + ' in the actual Bubble.io website!');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
